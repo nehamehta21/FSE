@@ -1,0 +1,167 @@
+﻿@model MyTwitterClone.Models.Entity
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .bs-container {
+            height: 800px;
+        }
+
+        .centerlook {
+            padding-left: 400px;
+            font-weight: bold;
+            width: 1000px;
+        }
+
+        .middlelook {
+            padding-left: 200px;
+            font-weight: bold;
+            width: 1000px;
+        }
+
+        .textarealook {
+            padding-left: 400px;
+            font-weight: bold;
+            width: 500px;
+            height: 150px;
+        }
+
+        .error {
+            padding-left: 400px;
+            font-weight: bold;
+            width: 1000px;
+            color: red;
+        }
+
+        .loginbtn {
+            padding-left: 500px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="col-xs-12">
+        <div class="col-xs-4" style="margin-left: -35px;">
+            @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+        {
+                <div class="col-xs-12">
+                    <label> Search User </label>
+                    <input class="form-control" name="sname" id="searchName" type="text" value="" />
+                    <div class="loginbtn col-xs-12" style="padding-top: 10px; margin-left: -322px;">
+                        <input type="submit" value="Search" class="btn btn-primary" formaction="Search" />
+                    </div>
+                </div>
+
+            if (Model != null && Model.SearchUserList != null)
+            {
+                    <div id=" searchGrid">
+                        @{
+                        var gridview1 = new WebGrid(source: Model.SearchUserList, rowsPerPage: 5);
+                        }
+
+                        @gridview1.GetHtml(tableStyle: "webGrid", headerStyle: "header", alternatingRowStyle: "altColor",
+                 columns:
+                         gridview1.Columns(
+                             gridview1.Column("UserName"),
+                              gridview1.Column("", style: "button",
+                                 format:
+                                @<text>
+
+                                    @*<button class="edit-case read" id="@item.UserName" formaction="Follow?UserName=&quot;@item.UserName&quot;">Follow</button>*@
+                                    <button class="edit-case read" id="@item.UserName" onclick="location.href='@Url.Action("Follow","Home",new { UserName = @item.UserName })'">Follow</button>
+
+                                </text>)
+
+
+                         ))
+                    </div>
+                            }
+                        }
+        </div>
+        <div class="col-xs-8">
+            @using (Html.BeginForm("Home","Home",FormMethod.Post))
+    {
+                <div class="bs-container col-xs-12" style="border-image: none; margin-left: -43px;">
+                    <div class="form-group middlelook col-xs-12" style="margin-left: -186px;">
+                        <h1 class="col-xs-6"> My Twitter Clone </h1>
+                        <div class="col-xs-6" style="height: 50px; padding-top: 24px; margin-left: -40px;">
+                            @if (Session["UserName"] != null)
+                {
+                                <label> Welcome @Session["UserName"].ToString()</label>
+                    }
+                            <label>|</label>
+                            @Html.ActionLink("Home", "Home", "Home")
+                            <label>|</label>
+                            @Html.ActionLink("Profile", "UpdateProfile", "Home")
+                            <label>|</label>
+                            @Html.ActionLink("Signout", "Index", "Home")
+                        </div>
+                    </div>
+
+                    <div class="form-group middlelook col-xs-12" style="margin-left: -172px;">
+                        <label> What are you doing? </label>
+                        @Html.TextAreaFor(model => model.TweetMessage, 10, 80, null)
+
+                    </div>
+                    <div class="form-group centerlook">
+
+                        @if (@ViewBag.ErrorMessage != null)
+                {
+
+                            <label style="color:red"> @ViewBag.ErrorMessage</label>
+                }
+                    </div>
+                    <div class="loginbtn">
+                        <input type="submit" value="Update" class="btn btn-primary" formaction="Home" />
+                    </div>
+                    @if (Model!=null && Model.TweetList != null)
+            {
+                        <div id=" grid">
+                            @{
+                        var gridview = new WebGrid(source: Model.TweetList, rowsPerPage: 100);
+                            }
+
+                            @gridview.GetHtml(tableStyle: "webGrid", headerStyle: "header", alternatingRowStyle: "altColor",
+columns:
+        gridview.Columns(
+            @*gridview.Column("", style: "button",
+                format:
+                @<text>
+                    <button class="edit-case read" id="@item.UserName">Edit</button>
+                    <button class="delete-case read" id="@item.UserName">Delete</button>
+                    <button class="update-case edit" id="@item.UserName">Update</button>
+                    <button class="cancel-case edit" id="@item.UserName">Cancel</button>
+                </text>),*@
+            gridview.Column("UserName"),
+            gridview.Column("Message"),
+            gridview.Column("Created")
+        ))
+                        </div>
+                        }
+
+
+                </div>
+                    }
+        </div>
+    </div>
+
+    @*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@   
+    
+    
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

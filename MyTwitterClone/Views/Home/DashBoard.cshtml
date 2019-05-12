@@ -1,0 +1,47 @@
+﻿@model MyTwitterClone.Models.Tweet
+
+@{
+    ViewBag.Title = "DashBoard";
+}
+
+<h2>DashBoard</h2>
+
+<div>
+    <h4>Tweet</h4>
+    <hr />
+    @if (Session["UserName"] != null)
+    {
+        <label> Welcome @Session["UserName"].ToString()</label>        
+    }
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TweetId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
