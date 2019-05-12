@@ -1,0 +1,69 @@
+USE [ReportServer]
+GO
+
+/****** Object:  Table [dbo].[Person]    Script Date: 4/23/2019 11:08:14 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Person](
+	[user_id] [varchar](25) NOT NULL,
+	[password] [varchar](50) NOT NULL,
+	[fullName] [varchar](30) NOT NULL,
+	[email] [varchar](50) NOT NULL,
+	[joined] [datetime] NOT NULL,
+	[active] [bit] NOT NULL,
+ CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+CREATE TABLE [dbo].[Tweet](
+	[tweet_id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [varchar](25) NOT NULL,
+	[message] [varchar](140) NOT NULL,
+	[created] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tweet_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Tweet]  WITH CHECK ADD FOREIGN KEY([user_id])
+REFERENCES [dbo].[Person] ([user_id])
+GO
+
+CREATE TABLE [dbo].[Following](
+	[user_id] [varchar](25) NOT NULL,
+	[following_id] [varchar](25) NOT NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Following]  WITH CHECK ADD FOREIGN KEY([following_id])
+REFERENCES [dbo].[Person] ([user_id])
+GO
+
+ALTER TABLE [dbo].[Following]  WITH CHECK ADD FOREIGN KEY([user_id])
+REFERENCES [dbo].[Person] ([user_id])
+GO
